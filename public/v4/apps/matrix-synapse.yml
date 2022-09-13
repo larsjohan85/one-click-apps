@@ -24,7 +24,7 @@ services:
             dockerfileLines:
                 - FROM matrixdotorg/synapse:$$cap_synapse_version
                 - RUN mkdir /data/
-                - ENV SYNAPSE_SERVER_NAME=$$cap_appname.$$cap_root_domain
+                - ENV SYNAPSE_SERVER_NAME=$$cap_server_name
                 - ENV SYNAPSE_REPORT_STATS=$$cap_synapse_stats
                 - RUN /start.py generate
                 - RUN echo '\nserve_server_wellknown\072 true' >> /data/homeserver.yaml
@@ -36,6 +36,14 @@ services:
 
 caproverOneClickApp:
     variables:
+        - id: '$$cap_server_name'
+          label: Server name
+          defaultValue: example.com
+          description: >-
+              The domain part for your usernames (e.g. @myusername:example.com).
+              You will need to set up .well-known files on that domain (for our example https://example.com/.well-known/matrix/...)
+              to point to your actual domain (which will probably be something like appname.apps.your-caprover-domain.com).
+              You might find the Synapse documentation useful for this: https://matrix-org.github.io/synapse/latest/setup/installation.html#client-well-known-uri
         - id: '$$cap_synapse_version'
           label: Synapse Version
           defaultValue: 'v1.63.1'
